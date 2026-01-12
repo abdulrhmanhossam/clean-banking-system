@@ -14,6 +14,11 @@ public class TransactionConfiguration : IEntityTypeConfiguration<Transaction>
                .HasPrecision(18, 2);
 
         builder.Property(x => x.Type)
+               .HasConversion<int>()
+               .IsRequired();
+
+        builder.Property(x => x.Status)
+               .HasConversion<int>()
                .IsRequired();
 
         builder.Property(x => x.CreatedAt)

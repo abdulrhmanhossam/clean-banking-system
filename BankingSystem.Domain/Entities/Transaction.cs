@@ -1,4 +1,6 @@
-﻿namespace BankingSystem.Domain.Entities;
+﻿using BankingSystem.Domain.Enums;
+
+namespace BankingSystem.Domain.Entities;
 
 public class Transaction
 {
@@ -7,17 +9,29 @@ public class Transaction
     public Guid? TargetAccountId { get; private set; }
     public decimal Amount { get; private set; }
     public DateTime CreatedAt { get; private set; }
-    public string Type { get; private set; }
+    public TransactionStatus Status { get; private set; }
+    public TransactionType Type { get; private set; }
 
     private Transaction() { }
 
-    public Transaction(Guid accountId, Guid? targetAccountId, decimal amount, string type)
+    public Transaction(Guid accountId, Guid? targetAccountId, decimal amount, TransactionType type)
     {
         Id = Guid.NewGuid();
         AccountId = accountId;
         TargetAccountId = targetAccountId;
         Amount = amount;
         Type = type;
+        Status = TransactionStatus.Pending;
         CreatedAt = DateTime.UtcNow;
+    }
+
+    public void Completed()
+    {
+        Status = TransactionStatus.Completed;
+    }
+
+    public void Failed()
+    {
+        Status = TransactionStatus.Failed;
     }
 }

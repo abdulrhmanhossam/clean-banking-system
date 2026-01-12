@@ -31,15 +31,23 @@ public class AccountService
     public DepositResponse Deposit(Guid accountId, decimal amount)
     {
         var account = _unitOfWork.Accounts.GetById(accountId);
+        var transaction = TransactionFactory.Deposit(accountId, amount);
 
-        account.Deposit(amount);
-        _unitOfWork.Accounts.Update(account);
+        try
+        {
+            account.Deposit(amount);
+            transaction.Completed();
 
-        _unitOfWork.Transactions.Add(
-            TransactionFactory.Deposit(accountId, amount)
-        );
-
-        _unitOfWork.Commit();
+            _unitOfWork.Transactions.Add(transaction);
+            _unitOfWork.Commit();
+        }
+        catch
+        {
+            transaction.Failed();
+            _unitOfWork.Transactions.Add(transaction);
+            _unitOfWork.Commit();
+            throw;
+        }
 
         return new DepositResponse
         {
@@ -53,14 +61,23 @@ public class AccountService
     {
         var account = _unitOfWork.Accounts.GetById(accountId);
 
-        account.Withdraw(amount);
-        _unitOfWork.Accounts.Update(account);
+        var transaction = TransactionFactory.Withdraw(accountId, amount);
 
-        _unitOfWork.Transactions.Add(
-            TransactionFactory.Withdraw(accountId, amount)
-        );
+        try
+        {
+            account.Withdraw(amount);
 
-        _unitOfWork.Commit();
+            transaction.Completed();
+            _unitOfWork.Transactions.Add(transaction);
+            _unitOfWork.Commit();
+        }
+        catch
+        {
+            transaction.Failed();
+            _unitOfWork.Transactions.Add(transaction);
+            _unitOfWork.Commit();
+            throw;
+        }
 
         return new WithdrawResponse
         {

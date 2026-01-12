@@ -18,14 +18,25 @@ public class TransferService
         var from = _unitOfWork.Accounts.GetById(fromAccountId);
         var to = _unitOfWork.Accounts.GetById(toAccountId);
 
-        from.Transfer(amount);
-        to.Deposit(amount);
+        var transaction = TransactionFactory.Transfer(fromAccountId, toAccountId, amount);
 
-        _unitOfWork.Transactions.Add(
-            TransactionFactory.Transfer(fromAccountId, toAccountId, amount)
-        );
+        try
+        {
+            from.Transfer(amount);
+            to.Deposit(amount);
 
-        _unitOfWork.Commit();
+            transaction.Completed();
+
+            _unitOfWork.Transactions.Add(transaction);
+            _unitOfWork.Commit();
+        }
+        catch
+        {
+            transaction.Failed();
+            _unitOfWork.Transactions.Add(transaction);
+            _unitOfWork.Commit();
+            throw;
+        }
 
         return new TransferResponse
         {
