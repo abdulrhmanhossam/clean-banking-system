@@ -9,6 +9,7 @@ public static class ApplicationDependencyInjection
     {
         // Register application services here
         services.AddScoped<AccountService>();
+        services.AddScoped<CustomerService>();
         services.AddScoped<TransferService>();
 
         return services;
