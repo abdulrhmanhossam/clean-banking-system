@@ -8,4 +8,5 @@ public interface IAccountRepository
     void Add(Account account);
     void Update(Account account);
     IReadOnlyCollection<Account> GetAll();
+    IReadOnlyCollection<Account> GetByCustomerId(Guid customerId);
 }

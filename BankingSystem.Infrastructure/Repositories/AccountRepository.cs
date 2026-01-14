@@ -29,4 +29,10 @@ public class AccountRepository : IAccountRepository
 
     public void Update(Account account)
         => _context.Accounts.Update(account);
+
+    public IReadOnlyCollection<Account> GetByCustomerId(Guid customerId)
+        => _context.Accounts
+        .Where(a => a.CustomerId == customerId)
+        .ToList()
+        .AsReadOnly();
 }

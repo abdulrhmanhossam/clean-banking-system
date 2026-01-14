@@ -49,4 +49,18 @@ public class CustomersController : ControllerBase
                 FullName = customer.FullName
             }));
     }
+
+    [HttpGet("{id}/accounts")]
+    public IActionResult GetAccounts(Guid id)
+    {
+        var accounts = _customerService.GetAccounts(id)
+            .Select(a => new CustomerAccountResponse
+            {
+                AccountId = a.Id,
+                Balance = a.Balance,
+                Status = a.Status,
+            });
+
+        return Ok(ApiResponse<IEnumerable<CustomerAccountResponse>>.Ok(accounts));
+    }
 }

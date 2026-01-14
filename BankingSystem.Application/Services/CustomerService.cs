@@ -27,4 +27,11 @@ public class CustomerService
 
     public IReadOnlyCollection<Customer> GetAll()
         => _unitOfWork.Customers.GetAll();
+
+    public IReadOnlyCollection<Account> GetAccounts(Guid customerId)
+    {
+        _unitOfWork.Customers.GetById(customerId);
+
+        return _unitOfWork.Accounts.GetByCustomerId(customerId);
+    }
 }
