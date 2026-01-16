@@ -10,11 +10,13 @@ namespace BankingSystem.API.Controllers;
 [ApiController]
 public class AccountsController : ControllerBase
 {
+    private readonly AccountStatementService _statementService;
     private readonly AccountService _accountService;
 
-    public AccountsController(AccountService accountService)
+    public AccountsController(AccountService accountService, AccountStatementService statementService)
     {
         _accountService = accountService;
+        _statementService = statementService;
     }
 
     [HttpPost("create")]
@@ -63,6 +65,17 @@ public class AccountsController : ControllerBase
             .Withdraw(request.AccountId, request.Amount);
 
         return Ok(ApiResponse<WithdrawResponse>.Ok(response));
+    }
+
+    [HttpGet("{id}/statement")]
+    public IActionResult GetStatement(
+    Guid id,
+    [FromQuery] DateTime? from,
+    [FromQuery] DateTime? to)
+    {
+        var response = _statementService.GetStatement(id, from, to);
+
+        return Ok(ApiResponse<AccountStatementResponse>.Ok(response));
     }
 
     [HttpPost("{id}/suspend")]

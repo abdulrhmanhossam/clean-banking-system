@@ -22,4 +22,20 @@ public class TransactionRepository : ITransactionRepository
             .OrderByDescending(t => t.CreatedAt)
             .ToList()
             .AsReadOnly();
+
+    public IReadOnlyCollection<Transaction> GetByAccountId(Guid accountId, DateTime? from, DateTime? to)
+    {
+        var query = _context.Transactions
+            .Where(t => t.AccountId == accountId);
+
+        if (from.HasValue)
+            query = query.Where(t => t.CreatedAt >= from.Value);
+
+        if (to.HasValue)
+            query = query.Where(t => t.CreatedAt <= to.Value);
+
+        return query
+            .OrderByDescending(t => t.CreatedAt)
+            .ToList();
+    }
 }
