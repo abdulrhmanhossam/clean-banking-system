@@ -23,5 +23,13 @@ public class TransactionConfiguration : IEntityTypeConfiguration<Transaction>
 
         builder.Property(x => x.CreatedAt)
                .IsRequired();
+
+        builder.Property(x => x.IsDeleted)
+                .IsRequired();
+
+        builder.Property(x => x.DeletedAt);
+
+        // Global Query Filter
+        builder.HasQueryFilter(t => !t.IsDeleted);
     }
 }

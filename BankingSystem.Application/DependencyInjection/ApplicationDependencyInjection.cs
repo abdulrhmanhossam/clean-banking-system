@@ -8,6 +8,7 @@ public static class ApplicationDependencyInjection
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         // Register application services here
+        services.AddScoped<TransactionAdminService>();
         services.AddScoped<AccountStatementService>();
         services.AddScoped<AccountService>();
         services.AddScoped<CustomerService>();

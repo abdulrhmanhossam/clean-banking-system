@@ -1,5 +1,6 @@
 ﻿using BankingSystem.Application.Interfaces;
 using BankingSystem.Domain.Entities;
+using BankingSystem.Domain.Exceptions;
 using BankingSystem.Infrastructure.Persistence;
 
 namespace BankingSystem.Infrastructure.Repositories;
@@ -15,6 +16,17 @@ public class TransactionRepository : ITransactionRepository
 
     public void Add(Transaction transaction)
         => _context.Transactions.Add(transaction);
+
+    public Transaction GetById(Guid id)
+    {
+        var transaction = _context.Transactions
+            .SingleOrDefault(t => t.Id == id);
+
+        if (transaction == null)
+            throw new TransactionNotFoundException(id);
+
+        return transaction;
+    }
 
     public IReadOnlyCollection<Transaction> GetByAccountId(Guid accountId)
         => _context.Transactions

@@ -11,6 +11,8 @@ public class Transaction
     public DateTime CreatedAt { get; private set; }
     public TransactionStatus Status { get; private set; }
     public TransactionType Type { get; private set; }
+    public bool IsDeleted { get; private set; }
+    public DateTime? DeletedAt { get; private set; }
 
     private Transaction() { }
 
@@ -23,6 +25,7 @@ public class Transaction
         Type = type;
         Status = TransactionStatus.Pending;
         CreatedAt = DateTime.UtcNow;
+        IsDeleted = false;
     }
 
     public void Completed()
@@ -33,5 +36,11 @@ public class Transaction
     public void Failed()
     {
         Status = TransactionStatus.Failed;
+    }
+
+    public void Delete()
+    {
+        IsDeleted = true;
+        DeletedAt = DateTime.UtcNow;
     }
 }
