@@ -11,6 +11,7 @@ public class Transaction
     public DateTime CreatedAt { get; private set; }
     public TransactionStatus Status { get; private set; }
     public TransactionType Type { get; private set; }
+    public Guid? ReversedTransactionId { get; private set; }
     public bool IsDeleted { get; private set; }
     public DateTime? DeletedAt { get; private set; }
 
@@ -36,6 +37,15 @@ public class Transaction
     public void Failed()
     {
         Status = TransactionStatus.Failed;
+    }
+
+    public void Reversed(Guid reversalTransactionId)
+    {
+        if (Status != TransactionStatus.Completed)
+            throw new InvalidOperationException();
+
+        Status = TransactionStatus.Failed;
+        ReversedTransactionId = reversalTransactionId;
     }
 
     public void Delete()

@@ -21,6 +21,8 @@ public class TransactionConfiguration : IEntityTypeConfiguration<Transaction>
                .HasConversion<int>()
                .IsRequired();
 
+        builder.Property(x => x.ReversedTransactionId);
+
         builder.Property(x => x.CreatedAt)
                .IsRequired();
 
