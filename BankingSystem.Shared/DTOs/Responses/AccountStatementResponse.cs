@@ -13,7 +13,8 @@ public class AccountStatementResponse
 public class AccountStatementItem
 {
     public Guid TransactionId { get; set; }
-    public TransactionType Type { get; set; }
+    public string Type { get; set; }
+    public string Status { get; set; }
     public decimal Amount { get; set; }
     public DateTime CreatedAt { get; set; }
 }

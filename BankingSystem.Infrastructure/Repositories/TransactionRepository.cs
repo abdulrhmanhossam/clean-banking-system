@@ -23,7 +23,10 @@ public class TransactionRepository : ITransactionRepository
             .ToList()
             .AsReadOnly();
 
-    public IReadOnlyCollection<Transaction> GetByAccountId(Guid accountId, DateTime? from, DateTime? to)
+    public IReadOnlyCollection<Transaction> GetByAccountId(
+        Guid accountId,
+        DateTime? from,
+        DateTime? to)
     {
         var query = _context.Transactions
             .Where(t => t.AccountId == accountId);
@@ -38,4 +41,8 @@ public class TransactionRepository : ITransactionRepository
             .OrderByDescending(t => t.CreatedAt)
             .ToList();
     }
+
+    public IQueryable<Transaction> QueryByAccountId(Guid accountId)
+        => _context.Transactions
+            .Where(t => t.AccountId == accountId);
 }

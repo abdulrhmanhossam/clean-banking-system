@@ -78,6 +78,19 @@ public class AccountsController : ControllerBase
         return Ok(ApiResponse<AccountStatementResponse>.Ok(response));
     }
 
+    [HttpGet("{id}/statement/paged")]
+    public IActionResult GetStatementPaged(
+    Guid id,
+    [FromQuery] DateTime? from,
+    [FromQuery] DateTime? to,
+    [FromQuery] PagedRequest request)
+    {
+        var result = _statementService
+            .GetStatementPaged(id, from, to, request);
+
+        return Ok(ApiResponse<PagedResponse<AccountStatementItem>>.Ok(result));
+    }
+
     [HttpPost("{id}/suspend")]
     public IActionResult Suspend(Guid id)
     {
