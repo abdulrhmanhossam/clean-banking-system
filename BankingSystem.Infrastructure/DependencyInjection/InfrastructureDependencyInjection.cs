@@ -21,11 +21,11 @@ public static class InfrastructureDependencyInjection
                 configuration.GetConnectionString("DefaultConnection"))
             );
 
+        services.AddScoped<ITransactionReadRepository, TransactionReadRepository>();
         services.AddScoped<IAccountRepository, AccountRepository>();
         services.AddScoped<ICustomerRepository, CustomerRepository>();
         services.AddScoped<ITransactionRepository, TransactionRepository>();
         services.AddScoped<IUnitOfWork, EfUnitOfWork>();
-        services.AddScoped<DailyLimitResetService>();
         services.AddHostedService<DailyLimitResetJob>();
 
         return services;

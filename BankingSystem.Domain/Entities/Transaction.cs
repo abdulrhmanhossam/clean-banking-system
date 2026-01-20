@@ -44,7 +44,7 @@ public class Transaction
         if (Status != TransactionStatus.Completed)
             throw new InvalidOperationException();
 
-        Status = TransactionStatus.Failed;
+        Status = TransactionStatus.Reversed;
         ReversedTransactionId = reversalTransactionId;
     }
 

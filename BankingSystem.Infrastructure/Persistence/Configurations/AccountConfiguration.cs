@@ -27,5 +27,8 @@ public class AccountConfiguration : IEntityTypeConfiguration<Account>
 
         builder.Property(x => x.CustomerId)
                .IsRequired();
+
+        builder.Property(a => a.RowVersion)
+               .IsRowVersion();
     }
 }

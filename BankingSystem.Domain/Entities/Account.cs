@@ -9,7 +9,7 @@ public class Account
     public Guid CustomerId { get; private set; }
     public decimal Balance { get; private set; }
     public AccountStatus Status { get; private set; }
-
+    public byte[] RowVersion { get; private set; }
     public decimal DailyWithdrawalLimit { get; private set; } = 10_000;
     public decimal DailyTransferLimit { get; private set; } = 20_000;
 

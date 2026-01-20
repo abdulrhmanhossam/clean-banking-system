@@ -49,8 +49,9 @@ public class TransactionReversalService
         account.Withdraw(tx.Amount);
 
         var reversal = TransactionFactory.Withdraw(tx.AccountId, tx.Amount);
-        _unitOfWork.Transactions.Add(reversal);
+        reversal.Completed();
 
+        _unitOfWork.Transactions.Add(reversal);
         tx.Reversed(reversal.Id);
     }
 
@@ -61,8 +62,9 @@ public class TransactionReversalService
         account.Deposit(tx.Amount);
 
         var reversal = TransactionFactory.Deposit(tx.AccountId, tx.Amount);
-        _unitOfWork.Transactions.Add(reversal);
+        reversal.Completed();
 
+        _unitOfWork.Transactions.Add(reversal);
         tx.Reversed(reversal.Id);
     }
 
@@ -79,6 +81,7 @@ public class TransactionReversalService
             tx.AccountId,
             tx.Amount
         );
+        reversal.Completed();
 
         _unitOfWork.Transactions.Add(reversal);
         tx.Reversed(reversal.Id);

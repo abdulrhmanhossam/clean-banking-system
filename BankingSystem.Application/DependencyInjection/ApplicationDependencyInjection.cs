@@ -11,6 +11,7 @@ public static class ApplicationDependencyInjection
         services.AddScoped<TransactionReversalService>();
         services.AddScoped<TransactionAdminService>();
         services.AddScoped<AccountStatementService>();
+        services.AddScoped<DailyLimitResetService>();
         services.AddScoped<AccountService>();
         services.AddScoped<CustomerService>();
         services.AddScoped<TransferService>();
