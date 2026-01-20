@@ -9,6 +9,7 @@ public class Transaction
     public Guid? TargetAccountId { get; private set; }
     public decimal Amount { get; private set; }
     public DateTime CreatedAt { get; private set; }
+    public DateTime? CompletedAt { get; private set; }
     public TransactionStatus Status { get; private set; }
     public TransactionType Type { get; private set; }
     public Guid? ReversedTransactionId { get; private set; }
@@ -32,6 +33,7 @@ public class Transaction
     public void Completed()
     {
         Status = TransactionStatus.Completed;
+        CompletedAt = DateTime.UtcNow;
     }
 
     public void Failed()

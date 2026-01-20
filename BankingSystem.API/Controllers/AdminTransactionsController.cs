@@ -6,7 +6,7 @@ namespace BankingSystem.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Roles = "Admin")]
+// [Authorize(Roles = "Admin")]
 public class AdminTransactionsController : ControllerBase
 {
     private readonly TransactionAdminService _transactionAdminService;

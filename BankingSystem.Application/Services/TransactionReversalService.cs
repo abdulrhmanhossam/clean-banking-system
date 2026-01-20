@@ -21,6 +21,9 @@ public class TransactionReversalService
         if (transaction.ReversedTransactionId != null)
             throw new InvalidOperationException("Transaction already reversed");
 
+        if (transaction.Status != TransactionStatus.Completed)
+            throw new InvalidOperationException("Only completed transactions can be reversed");
+
         switch (transaction.Type)
         {
             case TransactionType.Deposit:
@@ -73,7 +76,7 @@ public class TransactionReversalService
         var from = _unitOfWork.Accounts.GetById(tx.AccountId);
         var to = _unitOfWork.Accounts.GetById(tx.TargetAccountId!.Value);
 
-        to.Transfer(tx.Amount);
+        to.Withdraw(tx.Amount);
         from.Deposit(tx.Amount);
 
         var reversal = TransactionFactory.Transfer(

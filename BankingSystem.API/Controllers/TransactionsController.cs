@@ -1,4 +1,5 @@
 ﻿using BankingSystem.Application.Interfaces;
+using BankingSystem.Domain.Enums;
 using BankingSystem.Shared.DTOs.Responses;
 using BankingSystem.Shared.Responses;
 using Microsoft.AspNetCore.Mvc;
@@ -17,19 +18,26 @@ public class TransactionsController : ControllerBase
     }
 
     [HttpGet("{accountId}")]
-    public IActionResult GetHistory(Guid accountId)
+    public IActionResult GetHistory(
+    Guid accountId,
+    [FromQuery] TransactionStatus? status)
     {
-        var transactions = _transactionRepository.GetByAccountId(accountId)
-           .Select(t => new TransactionResponse
-           {
-               Id = t.Id,
-               Type = t.Type.ToString(),
-               Status = t.Status.ToString(),
-               Amount = t.Amount,
-               TargetAccountId = t.TargetAccountId,
-               CreatedAt = t.CreatedAt
-           });
+        var query = _transactionRepository
+            .QueryByAccountId(accountId);
 
-        return Ok(ApiResponse<IEnumerable<TransactionResponse>>.Ok(transactions));
+        if (status.HasValue)
+            query = query.Where(t => t.Status == status);
+
+        var result = query.Select(t => new TransactionResponse
+        {
+            Id = t.Id,
+            Type = t.Type.ToString(),
+            Status = t.Status.ToString(),
+            Amount = t.Amount,
+            TargetAccountId = t.TargetAccountId,
+            CreatedAt = t.CreatedAt
+        });
+
+        return Ok(ApiResponse<IEnumerable<TransactionResponse>>.Ok(result));
     }
 }

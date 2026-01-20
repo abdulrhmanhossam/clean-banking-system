@@ -31,6 +31,8 @@ public class TransactionConfiguration : IEntityTypeConfiguration<Transaction>
 
         builder.Property(x => x.DeletedAt);
 
+        builder.Property(x => x.CompletedAt);
+
         // Global Query Filter
         builder.HasQueryFilter(t => !t.IsDeleted);
     }
