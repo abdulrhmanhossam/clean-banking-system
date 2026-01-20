@@ -21,6 +21,7 @@ public static class InfrastructureDependencyInjection
                 configuration.GetConnectionString("DefaultConnection"))
             );
 
+        services.AddScoped<IAuditLogRepository, AuditLogRepository>();
         services.AddScoped<ITransactionReadRepository, TransactionReadRepository>();
         services.AddScoped<IAccountRepository, AccountRepository>();
         services.AddScoped<ICustomerRepository, CustomerRepository>();
