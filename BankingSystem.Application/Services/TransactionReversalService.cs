@@ -14,7 +14,7 @@ public class TransactionReversalService
         _unitOfWork = unitOfWork;
     }
 
-    public void Reverse(Guid transactionId)
+    public void Reverse(Guid transactionId, string reason, Guid adminUserId)
     {
         var transaction = _unitOfWork.Transactions.GetById(transactionId);
 
@@ -27,15 +27,15 @@ public class TransactionReversalService
         switch (transaction.Type)
         {
             case TransactionType.Deposit:
-                ReverseDeposit(transaction);
+                ReverseDeposit(transaction, reason, adminUserId);
                 break;
 
             case TransactionType.Withdraw:
-                ReverseWithdraw(transaction);
+                ReverseWithdraw(transaction, reason, adminUserId);
                 break;
 
             case TransactionType.Transfer:
-                ReverseTransfer(transaction);
+                ReverseTransfer(transaction, reason, adminUserId);
                 break;
 
             default:
@@ -45,7 +45,7 @@ public class TransactionReversalService
         _unitOfWork.Commit();
     }
 
-    private void ReverseDeposit(Transaction tx)
+    private void ReverseDeposit(Transaction tx, string reason, Guid adminUserId)
     {
         var account = _unitOfWork.Accounts.GetById(tx.AccountId);
 
@@ -55,10 +55,20 @@ public class TransactionReversalService
         reversal.Completed();
 
         _unitOfWork.Transactions.Add(reversal);
-        tx.Reversed(reversal.Id);
+        tx.Reversed(reversal.Id, reason, adminUserId);
+
+        _unitOfWork.AuditLogs.Add(
+            new AuditLog(
+                action: "TransactionReversed",
+                entity: "Transaction",
+                entityId: tx.Id,
+                userId: adminUserId,
+                details: reason
+            )
+        );
     }
 
-    private void ReverseWithdraw(Transaction tx)
+    private void ReverseWithdraw(Transaction tx, string reason, Guid adminUserId)
     {
         var account = _unitOfWork.Accounts.GetById(tx.AccountId);
 
@@ -68,10 +78,20 @@ public class TransactionReversalService
         reversal.Completed();
 
         _unitOfWork.Transactions.Add(reversal);
-        tx.Reversed(reversal.Id);
+        tx.Reversed(reversal.Id, reason, adminUserId);
+
+        _unitOfWork.AuditLogs.Add(
+            new AuditLog(
+                action: "TransactionReversed",
+                entity: "Transaction",
+                entityId: tx.Id,
+                userId: adminUserId,
+                details: reason
+            )
+        );
     }
 
-    private void ReverseTransfer(Transaction tx)
+    private void ReverseTransfer(Transaction tx, string reason, Guid adminUserId)
     {
         var from = _unitOfWork.Accounts.GetById(tx.AccountId);
         var to = _unitOfWork.Accounts.GetById(tx.TargetAccountId!.Value);
@@ -87,6 +107,16 @@ public class TransactionReversalService
         reversal.Completed();
 
         _unitOfWork.Transactions.Add(reversal);
-        tx.Reversed(reversal.Id);
+        tx.Reversed(reversal.Id, reason, adminUserId);
+
+        _unitOfWork.AuditLogs.Add(
+            new AuditLog(
+                action: "TransactionReversed",
+                entity: "Transaction",
+                entityId: tx.Id,
+                userId: adminUserId,
+                details: reason
+            )
+        );
     }
 }

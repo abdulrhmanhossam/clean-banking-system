@@ -13,6 +13,8 @@ public class Transaction
     public TransactionStatus Status { get; private set; }
     public TransactionType Type { get; private set; }
     public Guid? ReversedTransactionId { get; private set; }
+    public string? ReversalReason { get; private set; }
+    public Guid? ReversedByUserId { get; private set; }
     public bool IsDeleted { get; private set; }
     public DateTime? DeletedAt { get; private set; }
 
@@ -41,13 +43,18 @@ public class Transaction
         Status = TransactionStatus.Failed;
     }
 
-    public void Reversed(Guid reversalTransactionId)
+    public void Reversed(
+        Guid reversalTransactionId,
+        string reason,
+        Guid reversedByUserId)
     {
         if (Status != TransactionStatus.Completed)
-            throw new InvalidOperationException();
+            throw new InvalidOperationException("Only completed transactions can be reversed");
 
         Status = TransactionStatus.Reversed;
         ReversedTransactionId = reversalTransactionId;
+        ReversalReason = reason;
+        ReversedByUserId = reversedByUserId;
     }
 
     public void Delete()

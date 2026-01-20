@@ -1,4 +1,5 @@
 using BankingSystem.Application.Services;
+using BankingSystem.Shared.DTOs.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,9 +29,19 @@ public class AdminTransactionsController : ControllerBase
     }
 
     [HttpPost("{transactionId}/reverse")]
-    public IActionResult Reverse(Guid transactionId)
+    public IActionResult Reverse(
+        Guid transactionId,
+        [FromBody] ReverseTransactionRequest request)
     {
-        _reversalService.Reverse(transactionId);
+        var adminUserId = Guid.Parse(User.FindFirst("sub")!.Value);
+
+
+        _reversalService.Reverse(
+            transactionId,
+            request.Reason,
+            adminUserId
+        );
+
         return NoContent();
     }
 }

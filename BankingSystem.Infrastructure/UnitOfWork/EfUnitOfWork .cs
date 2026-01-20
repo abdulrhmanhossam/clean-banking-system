@@ -10,16 +10,20 @@ public class EfUnitOfWork : IUnitOfWork
     public ITransactionRepository Transactions { get; }
     public ICustomerRepository Customers { get; }
 
+    public IAuditLogRepository AuditLogs { get; }
+
     public EfUnitOfWork(
         BankingDbContext context,
         IAccountRepository accounts,
         ITransactionRepository transactions,
-        ICustomerRepository customers)
+        ICustomerRepository customers,
+        IAuditLogRepository auditLog)
     {
         _context = context;
         Accounts = accounts;
         Transactions = transactions;
         Customers = customers;
+        AuditLogs = auditLog;
     }
 
     public void Commit()
