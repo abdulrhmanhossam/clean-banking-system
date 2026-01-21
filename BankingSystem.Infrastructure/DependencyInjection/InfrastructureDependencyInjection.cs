@@ -20,7 +20,8 @@ public static class InfrastructureDependencyInjection
             options.UseSqlServer(
                 configuration.GetConnectionString("DefaultConnection"))
             );
-
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
         services.AddScoped<IAuditLogRepository, AuditLogRepository>();
         services.AddScoped<ITransactionReadRepository, TransactionReadRepository>();
         services.AddScoped<IAccountRepository, AccountRepository>();

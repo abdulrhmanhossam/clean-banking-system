@@ -14,6 +14,8 @@ public class BankingDbContext : DbContext
     public DbSet<Customer> Customers => Set<Customer>();
     public DbSet<Transaction> Transactions => Set<Transaction>();
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
+    public DbSet<User> Users => Set<User>();
+
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
