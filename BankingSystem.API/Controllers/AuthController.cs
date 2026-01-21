@@ -15,6 +15,16 @@ namespace BankingSystem.API.Controllers
             _auth = auth;
         }
 
+        [HttpPost("register")]
+        public IActionResult Register(RegisterRequest request)
+        {
+            _auth.Register(
+                request.Email,
+                request.Password,
+                request.Role);
+
+            return Ok();
+        }
         [HttpPost("login")]
         public IActionResult Login(LoginRequest request)
         {

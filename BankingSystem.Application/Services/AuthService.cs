@@ -1,4 +1,6 @@
 using BankingSystem.Application.Interfaces;
+using BankingSystem.Domain.Entities;
+using BankingSystem.Domain.Enums;
 using BankingSystem.Shared.DTOs;
 
 namespace BankingSystem.Application.Services;
@@ -15,7 +17,14 @@ public class AuthService
         _users = users;
         _tokenGenerator = tokenGenerator;
     }
+    public void Register(string email, string password, UserRole role)
+    {
+        var hash = BCrypt.Net.BCrypt.HashPassword(password);
 
+        var user = new User(email, hash, role);
+
+        _users.Add(user);
+    }
     public LoginResult Login(string email, string password)
     {
         var user = _users.GetByEmail(email);
